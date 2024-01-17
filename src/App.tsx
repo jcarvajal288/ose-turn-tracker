@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import './App.css';
-import {Button, Stack, Typography} from "@mui/material";
+import {Button, Modal, Stack, Typography} from "@mui/material";
+import {CustomLabelModal} from "./CustomLabelModal";
 
 type Timer = {
     label: string
@@ -11,6 +12,7 @@ const App = () => {
 
     const [turnCount, setTurnCount] = useState<number>(0);
     const [timers, setTimers] = useState<Timer[]>([]);
+    const [isCustomTimerModalVisible, setIsCustomTimerModalVisible] = useState<boolean>(false);
 
     const die = (size: number): number => Math.floor(Math.random() * size) + 1
     const d6 = (): number => die(6)
@@ -81,6 +83,17 @@ const App = () => {
                     Add Lantern
                 </Button>
             </Stack>
+            <Button onClick={() => setIsCustomTimerModalVisible(true)}>
+                Add Custom Timer
+            </Button>
+            <Modal
+                open={isCustomTimerModalVisible}
+            >
+                <CustomLabelModal
+                    closeModal={() => setIsCustomTimerModalVisible(false)}
+                    addTimer={addTimer}
+                />
+            </Modal>
         </Stack>
     );
 };
