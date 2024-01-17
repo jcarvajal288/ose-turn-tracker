@@ -33,7 +33,9 @@ const App = () => {
         setTurnCount(turnCount + 1)
         const newTimers = timers
             .filter((timer) => timer.turnsLeft > 1)
-            .map((timer): Timer => { return { label: timer.label, turnsLeft: timer.turnsLeft - 1}})
+            .map((timer): Timer => {
+                return {label: timer.label, turnsLeft: timer.turnsLeft - 1}
+            })
         setTimers(newTimers)
     }
 
@@ -59,11 +61,11 @@ const App = () => {
                 direction='row'
                 justifyContent='space-around'
             >
-            {
-                timers.map((timer) => (
-                    <Typography variant='h5'>{`${timer.label}: ${timer.turnsLeft}`}</Typography>
-                ))
-            }
+                {
+                    timers.map((timer) => (
+                        <Typography variant='h5'>{`${timer.label}: ${timer.turnsLeft}`}</Typography>
+                    ))
+                }
             </Stack>
             <Button
                 variant='contained'
@@ -71,9 +73,14 @@ const App = () => {
             >
                 Next Turn
             </Button>
-            <Button onClick={() => addTimer('Torch', 6)}>
-                Add Torch
-            </Button>
+            <Stack direction='row' gap={4}>
+                <Button onClick={() => addTimer('Torch', 6)}>
+                    Add Torch
+                </Button>
+                <Button onClick={() => addTimer('Lantern', 24)}>
+                    Add Lantern
+                </Button>
+            </Stack>
         </Stack>
     );
 };
