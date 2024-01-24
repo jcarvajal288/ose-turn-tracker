@@ -41,6 +41,7 @@ export const CustomLabelModal = (props: CustomLabelModalProps) => {
                     <TextField
                         type='number'
                         label="Duration"
+                        defaultValue={duration}
                         onChange={(e) => setDuration(Number(e.target.value))}
                     />
                     <Stack direction='row' justifyContent='end'>

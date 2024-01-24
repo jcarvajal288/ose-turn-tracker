@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import './App.css';
-import {Button, Modal, Stack, Typography} from "@mui/material";
+import {Button, Divider, Modal, Stack, Typography} from "@mui/material";
 import {CustomLabelModal} from "./CustomLabelModal";
 
 type Timer = {
@@ -13,9 +13,33 @@ const App = () => {
     const [turnCount, setTurnCount] = useState<number>(0);
     const [timers, setTimers] = useState<Timer[]>([]);
     const [isCustomTimerModalVisible, setIsCustomTimerModalVisible] = useState<boolean>(false);
+    const [dieRollResult, setDieRollResult] = useState<string>("");
+    const [result1, setResult1] = useState<number>(0);
+    const [result2, setResult2] = useState<number>(0);
+    const [result3, setResult3] = useState<number>(0);
+    const [result4, setResult4] = useState<number>(0);
+    const [result5, setResult5] = useState<number>(0);
+    const [result6, setResult6] = useState<number>(0);
 
     const die = (size: number): number => Math.floor(Math.random() * size) + 1
+    const d4 = (): number => die(4)
     const d6 = (): number => die(6)
+    const d8 = (): number => die(8)
+    const d10 = (): number => die(10)
+    const d12 = (): number => die(12)
+    const d20 = (): number => die(20)
+
+    const DieButton = (die: () => number, label: string) => (
+        <Button
+            variant='contained'
+            onClick={() => {
+                setDieRollResult(die().toString(10))
+            }}
+        >
+            {label}
+        </Button>
+    )
+
 
     const getTimePassed = (): string => {
         const hours = Math.floor(turnCount / 6)
@@ -86,6 +110,20 @@ const App = () => {
             <Button onClick={() => setIsCustomTimerModalVisible(true)}>
                 Add Custom Timer
             </Button>
+            <Divider/>
+            <Typography variant='h5'>{dieRollResult}</Typography>
+            <Stack gap={3}>
+                <Stack direction='row' gap={3}>
+                    {DieButton(d4, 'd4')}
+                    {DieButton(d6, 'd6')}
+                    {DieButton(d8, 'd8')}
+                </Stack>
+                <Stack direction='row' gap={3}>
+                    {DieButton(d10, 'd10')}
+                    {DieButton(d12, 'd12')}
+                    {DieButton(d20, 'd20')}
+                </Stack>
+            </Stack>
             <Modal
                 open={isCustomTimerModalVisible}
             >
