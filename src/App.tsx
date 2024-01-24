@@ -14,12 +14,6 @@ const App = () => {
     const [timers, setTimers] = useState<Timer[]>([]);
     const [isCustomTimerModalVisible, setIsCustomTimerModalVisible] = useState<boolean>(false);
     const [dieRollResult, setDieRollResult] = useState<string>("");
-    const [result1, setResult1] = useState<number>(0);
-    const [result2, setResult2] = useState<number>(0);
-    const [result3, setResult3] = useState<number>(0);
-    const [result4, setResult4] = useState<number>(0);
-    const [result5, setResult5] = useState<number>(0);
-    const [result6, setResult6] = useState<number>(0);
 
     const die = (size: number): number => Math.floor(Math.random() * size) + 1
     const d4 = (): number => die(4)
