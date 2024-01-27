@@ -15,7 +15,12 @@ const App = () => {
     const [isCustomTimerModalVisible, setIsCustomTimerModalVisible] = useState<boolean>(false);
     const [dieRollResult, setDieRollResult] = useState<string>("");
 
-    const die = (size: number): number => Math.floor(Math.random() * size) + 1
+    const die = (size: number): number => {
+        const array = new Uint32Array(1);
+        window.crypto.getRandomValues(array)
+        const randomByte = array[0];
+        return Math.floor(randomByte % size) + 1
+    }
     const d4 = (): number => die(4)
     const d6 = (): number => die(6)
     const d8 = (): number => die(8)
@@ -23,11 +28,11 @@ const App = () => {
     const d12 = (): number => die(12)
     const d20 = (): number => die(20)
 
-    const DieButton = (die: () => number, label: string) => (
+    const DieButton = (dieFunc: () => number, label: string) => (
         <Button
             variant='contained'
             onClick={() => {
-                setDieRollResult(die().toString(10))
+                setDieRollResult(dieFunc().toString(10))
             }}
         >
             {label}
@@ -60,7 +65,7 @@ const App = () => {
     }
 
 
-    const turnModulator = (mod: number) => turnCount !== 0 && turnCount % mod === 0
+    const turnModulator = (threshold: number) => turnCount !== 0 && turnCount % threshold === 0
 
     const isWanderingMonster = (): 'visible' | 'hidden' => turnModulator(2) && d6() <= 1 ? 'visible' : 'hidden'
     const isRestTurn = (): 'visible' | 'hidden' => turnModulator(6) ? 'visible' : 'hidden'
