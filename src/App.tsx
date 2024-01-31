@@ -14,7 +14,7 @@ const App = () => {
     const [timers, setTimers] = useState<Timer[]>([]);
     const [isCustomTimerModalVisible, setIsCustomTimerModalVisible] = useState<boolean>(false);
     const [dieExpression, setDieExpression] = useState<string>("");
-    const [dieRollResult, setDieRollResult] = useState<string>("");
+    const [dieRollResult, setDieRollResult] = useState<string>("blank");
 
     const die = (size: number): number => {
         const array = new Uint32Array(1);
@@ -126,8 +126,13 @@ const App = () => {
                 Add Custom Timer
             </Button>
             <Divider/>
-            <Typography variant='h5'>{dieRollResult}</Typography>
-            <Stack gap={3}>
+            <Typography
+                variant='h5'
+                visibility={dieRollResult === 'blank' ? 'hidden' : 'visible'}
+            >
+                {dieRollResult}
+            </Typography>
+            <Stack gap={3} alignItems='center'>
                 <Stack direction='row' gap={3}>
                     {DieButton(d4, 'd4')}
                     {DieButton(d6, 'd6')}
@@ -138,13 +143,20 @@ const App = () => {
                     {DieButton(d12, 'd12')}
                     {DieButton(d20, 'd20')}
                 </Stack>
-                <Stack direction='row'>
+                <Stack
+                    sx={{ mt: 5 }}
+                >
                     <TextField
                         label='Die Formula'
                         helperText='e.g. 3d6+5'
                         onChange={(e) => setDieExpression(e.target.value)}
                     />
-                    <Button variant='contained' onClick={() => evaluateDieFormula()}>Roll</Button>
+                    <Button
+                        variant='contained'
+                        onClick={() => evaluateDieFormula()}
+                    >
+                        Roll
+                    </Button>
                 </Stack>
             </Stack>
             <Modal
