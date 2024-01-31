@@ -1,6 +1,6 @@
-import React, {useState} from 'react';
+import React, {FormEvent, useState} from 'react';
 import './App.css';
-import {Button, Divider, Modal, Stack, Typography} from "@mui/material";
+import {Box, Button, Divider, Modal, Stack, TextField, Typography} from "@mui/material";
 import {CustomLabelModal} from "./CustomLabelModal";
 
 type Timer = {
@@ -13,6 +13,7 @@ const App = () => {
     const [turnCount, setTurnCount] = useState<number>(0);
     const [timers, setTimers] = useState<Timer[]>([]);
     const [isCustomTimerModalVisible, setIsCustomTimerModalVisible] = useState<boolean>(false);
+    const [dieExpression, setDieExpression] = useState<string>("");
     const [dieRollResult, setDieRollResult] = useState<string>("");
 
     const die = (size: number): number => {
@@ -39,6 +40,21 @@ const App = () => {
         </Button>
     )
 
+    const evaluateDieFormula = () => {
+        const dieRegex = /[+|-]?\d*d\d+/;
+        const constantRegex = /[+|-]\d+[^d]/;
+        const dieRolls = dieExpression.match(dieRegex) || []
+        const constants = dieExpression.match(constantRegex) || []
+        const dieResults = dieRolls.flatMap((dieRoll) => {
+            const [multiplier, dieSize] = dieRoll.split('d');
+            const numRolls = Math.abs(Number(multiplier))
+            const sign = Math.sign(Number(multiplier))
+            return new Array(numRolls).fill(sign).map((n) => n * die(Number(dieSize)))
+        })
+        const allResults = (dieResults.concat(constants.map((c) => Number(c))))
+        const answer = allResults.reduce((a, b) => a + b)
+        setDieRollResult(answer.toString(10))
+    }
 
     const getTimePassed = (): string => {
         const hours = Math.floor(turnCount / 6)
@@ -122,14 +138,24 @@ const App = () => {
                     {DieButton(d12, 'd12')}
                     {DieButton(d20, 'd20')}
                 </Stack>
+                <Stack direction='row'>
+                    <TextField
+                        label='Die Formula'
+                        helperText='e.g. 3d6+5'
+                        onChange={(e) => setDieExpression(e.target.value)}
+                    />
+                    <Button variant='contained' onClick={() => evaluateDieFormula()}>Roll</Button>
+                </Stack>
             </Stack>
             <Modal
                 open={isCustomTimerModalVisible}
             >
-                <CustomLabelModal
-                    closeModal={() => setIsCustomTimerModalVisible(false)}
-                    addTimer={addTimer}
-                />
+                <Box>
+                    <CustomLabelModal
+                        closeModal={() => setIsCustomTimerModalVisible(false)}
+                        addTimer={addTimer}
+                    />
+                </Box>
             </Modal>
         </Stack>
     );
