@@ -1,4 +1,4 @@
-import React, {FormEvent, useState} from 'react';
+import React, {FormEvent, useMemo, useState} from 'react';
 import './App.css';
 import {Box, Button, Divider, Modal, Stack, TextField, Typography} from "@mui/material";
 import {CustomLabelModal} from "./CustomLabelModal";
@@ -83,8 +83,13 @@ const App = () => {
 
     const turnModulator = (threshold: number) => turnCount !== 0 && turnCount % threshold === 0
 
-    const isWanderingMonster = (): 'visible' | 'hidden' => turnModulator(2) && d6() <= 1 ? 'visible' : 'hidden'
-    const isRestTurn = (): 'visible' | 'hidden' => turnModulator(6) ? 'visible' : 'hidden'
+    const isWanderingMonster: 'visible' | 'hidden' = useMemo((): 'visible' | 'hidden' => {
+        return turnModulator(2) && d6() <= 1 ? 'visible' : 'hidden';
+    }, [turnCount]);
+
+    const isRestTurn: 'visible' | 'hidden' = useMemo((): 'visible' | 'hidden' => {
+        return turnModulator(6) ? 'visible' : 'hidden';
+    }, [turnCount]);
 
     return (
         <Stack
