@@ -28,6 +28,7 @@ const App = () => {
     const d10 = (): number => die(10)
     const d12 = (): number => die(12)
     const d20 = (): number => die(20)
+    const d100 = (): number => die(100)
 
     const DieButton = (dieFunc: () => number, label: string) => (
         <Button
@@ -148,8 +149,9 @@ const App = () => {
                     {DieButton(d12, 'd12')}
                     {DieButton(d20, 'd20')}
                 </Stack>
+                {DieButton(d100, 'd100')}
                 <Stack
-                    sx={{ mt: 5 }}
+                    sx={{ mt: 2 }}
                 >
                     <TextField
                         label='Die Formula'
